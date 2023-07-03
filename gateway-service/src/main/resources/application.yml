@@ -6,8 +6,54 @@ eureka:
       default-zone: http://localhost:8761/eureka
 server:
   port: 1000
-spring:
-  application:
-    name: gateway-service
+  
     
+spring:
+   application:
+      name: gateway-service
+   cloud:
+      gateway:
+         default-filters:
+           - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+         globalcors:
+           corsConfigurations:
+             '[/**]':
+              allowedOrigins: "*"
+              allowedHeaders: "*"
+              allowedMethods: "*"
+           add-to-simple-url-handler-mapping: true  
+           
+            
+         routes:
+         
+         
+         - id: student-service
+           uri: http://localhost:8085
+           predicates:
+           - Path=/api/student-service/**
+           filters:
+              - StripPrefix=2
+              - name: CircuitBreaker
+                args:
+                      name: student-service
+                      fallbackuri: forward:/studentFallback
+         
+         
+           
+         - id: college-service
+           uri: http://localhost:8086
+           predicates:
+           - Path=/api/college-service/**
+           filters:
+           - StripPrefix=2
 
+
+        
+           
+
+        
+           
+           
+           
+           
+           
