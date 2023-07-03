@@ -40,12 +40,7 @@ spring:
          
          
            
-         - id: college-service
-           uri: http://localhost:8086
-           predicates:
-           - Path=/api/college-service/**
-           filters:
-           - StripPrefix=2
+
 
 
         
